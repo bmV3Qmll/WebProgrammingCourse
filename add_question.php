@@ -35,7 +35,11 @@ include 'connect_db.php';
 $sql = "SELECT name FROM courses WHERE cid = $cid";
 $result = $conn->query($sql);
 $courseName = $result->fetch_assoc()['name'];
-echo '<h1 class="mt-3">' . $courseName . '</h1>';
+//echo '<h1 class="mt-3">' . $courseName . '</h1>';
+echo '<div class="d-flex justify-content-between align-items-center mt-3">';
+echo '<h1>' . $courseName . '</h1>';
+echo '<a href="view_course.php?name=' . $courseName . '" class="btn btn-primary">Back to Course</a>';
+echo '</div>';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -45,31 +49,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
     $description = $_POST['description'];
     $difficulty = strtolower($_POST['difficulty']);
-    $multiple = 0;
+    $multiple = 1;
 
     $options = [];
-    if (isset($_POST['options']) && is_array($_POST['options']) && isset($_POST['optionContent']) && is_array($_POST['optionContent'])) {
-        $optionValues = $_POST['options'];
+    if (isset($_POST['optionContent']) && is_array($_POST['optionContent'])) {
+        // 
         $optionContents = $_POST['optionContent'];
-        foreach ($optionContents as $index => $content) {
-            $options[$content] = in_array($index, $optionValues) ? "1" : "0";
-        }
-        if (count($optionValues) != 1) {
-            $multiple = 1;
+        if (isset($_POST['options']) && is_array($_POST['options'])) {
+            $optionValues = $_POST['options'];
+            foreach ($optionContents as $index => $content) {
+                $options[$content] = in_array($index, $optionValues) ? "1" : "0";
+            }
+            if (count($optionValues) == 1) {
+                $multiple = 0;
+            }
+        } else {
+            foreach ($optionContents as $index => $content) {
+                $options[$content] = "0";
+            }
         }
     }
     $options = json_encode($options);
+    $options = str_replace("\\\"", "\\\\\"", $options);
+    $options = str_replace("'", "\\'", $options);
 
     if ($imageOk == 1) {
+        $sql = "SET @json = ('$options')";
+        $conn->query($sql);
         $sql = "";
         if ($imagePath) {
             $sql = "INSERT INTO questions (title, description, cid, options, difficulty, image_path, multiple) 
-            VALUES ('$title', '$description', '$cid', '$options', '$difficulty', '$imagePath', '$multiple')";
+            VALUES ('$title', '$description', '$cid', @json, '$difficulty', '$imagePath', '$multiple')";
         } else {
             $sql = "INSERT INTO questions (title, description, cid, options, difficulty, multiple) 
-            VALUES ('$title', '$description', '$cid', '$options', '$difficulty', '$multiple')";
+            VALUES ('$title', '$description', '$cid', @json, '$difficulty', $multiple)";
         }
-        
         try {
             $conn->query($sql);
             echo "<p>Question added successfully.</p>";

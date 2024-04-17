@@ -27,33 +27,40 @@
 		.test-card {
 			margin-bottom: 20px;
 		}
+
+		a {
+			font-size: 30px;
+			color: inherit;
+			text-decoration: none;
+		}
+
+		div.bounding-box a:hover {
+			font-size: 40px;
+			color: inherit;
+			text-decoration: none;
+		}
+
+		.bounding-box {
+            border: 2px solid #ccc; /* Border color */
+            padding: 10px; /* Padding inside the bounding box */
+            border-radius: 5px; /* Rounded corners */
+            margin-bottom: 20px; /* Margin to separate bounding boxes */
+        }
 	</style>
 </head>
 <body>
 	<div class="container">
 	<?php
-	// Database connection
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$dbname = "assignment";
-
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $dbname);
-
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
+	include 'connect_db.php';
 	$courseName = $_GET['name'];
 	/*
 	$sqlImagePath = "SELECT image_path FROM courses WHERE name = '$courseName'";
 	$resultImagePath = $conn->query($sqlImagePath);
 	if ($resultImagePath->num_rows > 0) {
-	    $rowImagePath = $resultImagePath->fetch_assoc();
-	    $courseImagePath = $rowImagePath['image_path'];
+		$rowImagePath = $resultImagePath->fetch_assoc();
+		$courseImagePath = $rowImagePath['image_path'];
 	} else {
-	    $courseImagePath = 'assets/blank.jpg'; // Set default image path
+		$courseImagePath = 'assets/blank.jpg'; // Set default image path
 	}
 
 	echo "<body style=\"background-image: url('" . $courseImagePath . "');\"";
@@ -71,12 +78,13 @@
 	echo '</div>';
 
 	// Retrieve tests for the course
-	$sql = "SELECT title, no_easy, no_medium, no_hard FROM tests WHERE cid = '$cid'";
+	$sql = "SELECT tid, title, no_easy, no_medium, no_hard FROM tests WHERE cid = '$cid'";
 
 	$result = $conn->query($sql);
 
 	if ($result->num_rows > 0) {
 		while ($row = $result->fetch_assoc()) {
+			$tid = $row['tid'];
 			$title = $row['title'];
 			$noEasy = $row['no_easy'];
 			$noMedium = $row['no_medium'];
@@ -90,9 +98,11 @@
 			$percentMedium = round(($noMedium / $totalQuestions) * 100);
 			$percentHard = round(($noHard / $totalQuestions) * 100);
 
-			echo '<div class="test-card">';
-			echo '<h3>' . $title . ' - Number of Questions: ' . $totalQuestions . '</h3>';
-			echo '<canvas id="chart_' . $title . '" width="400" height="400"></canvas>';
+			// echo '<div class="test-card">';
+			echo '<div class="d-flex justify-content-between align-items-center mb-3 bounding-box">';
+			echo '<div class="mr-auto p-2"><a href="view_test.php?tid=' . $tid . '">' . $title . '</a></div>';
+			echo '<div class="p-2"><h5>' . $totalQuestions . ' questions</h5></div>';
+			echo '<div class="p-2"><canvas id="chart_' . $title . '" width="200" height="80"></canvas></div>';
 			echo '</div>';
 
 			// JavaScript to create pie chart
@@ -106,12 +116,12 @@
 								label: 'Difficulty Distribution',
 								data: [$percentEasy, $percentMedium, $percentHard],
 								backgroundColor: [
-									'rgba(54, 162, 235, 0.6)',
+									'rgba(51, 255, 51, 0.6)',
 									'rgba(255, 206, 86, 0.6)',
 									'rgba(255, 99, 132, 0.6)'
 								],
 								borderColor: [
-									'rgba(54, 162, 235, 1)',
+									'rgba(51, 255, 51, 1)',
 									'rgba(255, 206, 86, 1)',
 									'rgba(255, 99, 132, 1)'
 								],
@@ -127,7 +137,7 @@
 									position: 'right'
 								},
 								title: {
-									display: true,
+									display: false,
 									text: 'Difficulty Distribution'
 								}
 							}

@@ -22,10 +22,11 @@
     $sql = "SELECT name FROM courses WHERE cid = $cid";
     $result = $conn->query($sql);
     $courseName = $result->fetch_assoc()['name'];
-    echo '<div class="d-flex justify-content-between align-items-center mb-3">';
+    echo '<div class="d-flex justify-content-between align-items-center mt-3">';
     echo '<h1>' . $courseName . '</h1>';
+    echo '<a href="view_course.php?name=' . $courseName . '" class="btn btn-primary">Back to Course</a>';
     echo '</div>';
-
+    
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['cid'])) {
         $title = $_POST['title'];
         $description = $_POST['description'];

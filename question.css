@@ -1,0 +1,39 @@
+.question {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 20px;
+	margin-bottom: 20px;
+	position: relative;
+}
+.image {
+	max-width: 100%;
+	height: auto;
+}
+.difficulty {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 30px;
+	font-weight: bold;
+}
+.difficulty.green {
+	background-color: green;
+	color: white;
+}
+.difficulty.yellow {
+	background-color: yellow;
+	color: black;
+}
+.difficulty.red {
+	background-color: red;
+	color: white;
+}
+.checkbox-label {
+    cursor: pointer;
+    padding-left: 25px; /* Space for the tick or cross */
+    position: relative;
+}
