@@ -1,0 +1,5 @@
+SET @json = ('{"Red":"1", "Blue":"1", "Green":"1", "Yellow":"0"}');
+INSERT INTO questions (title, description, cid, options, difficulty, image_path, multiple) VALUES ("Which colors make up RGB?", "RGB stands for ...", 3, @json, "easy", 'assets/table.jpeg', true);
+
+SET @json = ('{"map()":"0", "all()":"1", "reduce()":"0", "filter()":"0"}');
+INSERT INTO questions (title, cid, options, difficulty, multiple) VALUES ("Which is not a built-in higher-order function in Python?", 1, @json, "medium", false);

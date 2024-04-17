@@ -27,8 +27,8 @@ if ($result->num_rows > 0) {
 		$imagePath = $row['image_path'];
 
 		$courses_html .= '<div class="col-md-4 course-card">';
-		$courses_html .= '<img src="' . $imagePath . '" alt="' . $name . '" class="img-fluid">';
-		$courses_html .= '<h4 class="course-name">' . $name . '</h4>';
+		$courses_html .= '<img src="' . $imagePath . '" alt="' . $name . '">';
+		$courses_html .= '<h3 class="course-name">' . $name . '</h3>';
 		$courses_html .= '</div>';
 	}
 }

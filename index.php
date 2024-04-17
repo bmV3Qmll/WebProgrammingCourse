@@ -21,6 +21,11 @@
 			margin-top: 10px; /* Add some space between the image and the course name */
 			font-weight: bold; /* Make the course name bold */
 		}
+
+		img {
+		  width: 300px;
+		  height: 200px;
+		}
 	</style>
 </head>
 <body>

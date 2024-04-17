@@ -58,11 +58,20 @@
 
 	echo "<body style=\"background-image: url('" . $courseImagePath . "');\"";
 	*/
-	echo '<div class="container">';
-	echo '<h1>' . $courseName . '</h1>';
+	$sql = "SELECT cid FROM courses WHERE name = '$courseName'";
+
+	$result = $conn->query($sql);
+
+	$cid = $result->fetch_assoc()['cid'];
+
+	echo '<div class="d-flex justify-content-between align-items-center mb-3">';
+	echo '<div class="mr-auto p-2"><h1>' . $courseName . '</h1></div>';
+	echo '<div class="p-2"><a href="add_test.php?cid=' . $cid . '" class="btn btn-primary">Add Test</a></div>';
+	echo '<div class="p-2"><a href="add_question.php?cid=' . $cid . '" class="btn btn-primary">Add Question</a></div>';
+	echo '</div>';
 
 	// Retrieve tests for the course
-	$sql = "SELECT title, no_easy, no_medium, no_hard FROM tests WHERE cid IN (SELECT cid FROM courses WHERE name = '$courseName')";
+	$sql = "SELECT title, no_easy, no_medium, no_hard FROM tests WHERE cid = '$cid'";
 
 	$result = $conn->query($sql);
 
@@ -124,7 +133,7 @@
 							}
 						}
 					});
-				  </script>";
+				</script>";
 		}
 	} else {
 		echo "No tests found for the course.";
