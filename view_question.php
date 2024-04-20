@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>View Question</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="question.css">
-</head>
-<body>
-
+<?php include 'nav_bar.php' ?>
+<link rel="stylesheet" href="question.css">
 <div class="container">
 	<?php
 	include 'connect_db.php';
@@ -42,6 +33,3 @@
 	</script>
 	<script type="text/javascript" src="question.js"></script>
 </div>
-
-</body>
-</html>

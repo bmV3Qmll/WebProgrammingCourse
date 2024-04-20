@@ -1,25 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Question</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .form-check-input[type="checkbox"] {
-            width: 2rem; /* Adjust width of checkbox */
-            height: 2rem; /* Adjust height of checkbox */
-            margin-left: -0.85rem;
-        }
+<?php include 'nav_bar.php' ?>
+<style>
+    .form-check-input[type="checkbox"] {
+        width: 2rem; /* Adjust width of checkbox */
+        height: 2rem; /* Adjust height of checkbox */
+        margin-left: -0.85rem;
+    }
 
-        /* Adjust position of checkbox */
-        .input-group-prepend .input-group-text {
-            width: 2rem; /* Adjust width to match checkbox */
-            padding-right: 0rem; /* Add space between checkbox and text input */
-        }
-    </style>
-</head>
-<body>
+    /* Adjust position of checkbox */
+    .input-group-prepend .input-group-text {
+        width: 2rem; /* Adjust width to match checkbox */
+        padding-right: 0rem; /* Add space between checkbox and text input */
+    }
+</style>
 <div class="container">
 <?php
 // Check if CID is provided in URL
@@ -176,6 +168,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         document.getElementById("uploadForm").submit();
     }
 </script>
-
-</body>
-</html>

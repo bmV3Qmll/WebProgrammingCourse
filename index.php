@@ -1,39 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Course Display</title>
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<!-- Custom CSS -->
-	<style>
-		.course-card {
-			border: 1px solid #ccc; /* Add a border around each course */
-			border-radius: 5px; /* Add some border radius for rounded corners */
-			padding: 20px; /* Add padding inside the course box */
-			text-align: center; /* Center the content horizontally */
-			margin-bottom: 20px; /* Add some space between each course */
-			cursor: pointer; /* Change cursor to pointer on hover */
-		}
+<?php include 'nav_bar.php' ?>
+<style>
+	.course-card {
+		border: 1px solid #ccc; /* Add a border around each course */
+		border-radius: 5px; /* Add some border radius for rounded corners */
+		padding: 20px; /* Add padding inside the course box */
+		text-align: center; /* Center the content horizontally */
+		margin-bottom: 20px; /* Add some space between each course */
+		cursor: pointer; /* Change cursor to pointer on hover */
+	}
 
-		.course-name {
-			margin-top: 10px; /* Add some space between the image and the course name */
-			font-weight: bold; /* Make the course name bold */
-		}
+	.course-name {
+		margin-top: 10px; /* Add some space between the image and the course name */
+		font-weight: bold; /* Make the course name bold */
+	}
 
-		img {
-		  width: 300px;
-		  height: 200px;
-		}
-	</style>
-</head>
-<body>
-
+	img {
+	  width: 300px;
+	  height: 200px;
+	}
+</style>
 <div class="container">
 	<div class="d-flex justify-content-between align-items-center mb-3">
 		<h1>Courses</h1>
-		<a href="add_course.php" class="btn btn-primary">Add Course</a>
+		<?php
+			if(isset($_SESSION["username"])) {
+				echo '<a href="add_course.php" class="btn btn-primary">Add Course</a>';
+			}
+		?>
+		
 	</div>
 	
 	<div id="courseContainer" class="row">
@@ -86,6 +80,3 @@ $(document).ready(function(){
 	});
 });
 </script>
-
-</body>
-</html>
