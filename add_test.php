@@ -1,4 +1,10 @@
-<?php include 'nav_bar.php' ?>
+<?php
+include 'nav_bar.php';
+if(!isset($_SESSION["uid"])) {
+	header("Location: login.php");
+	exit();
+}
+?>
 <style>
 	.warning {
 		color: red;
@@ -18,8 +24,10 @@
 	echo '</div>';
 	
 	if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['cid'])) {
-		$title = $_POST['title'];
-		$description = $_POST['description'];
+		$stat = 0;
+		echo '<div id="messageBox" class="alert alert-info message-box" role="alert">';
+		$title = $conn->real_escape_string($_POST['title']);
+		$description = $conn->real_escape_string($_POST['description']);
 		$no_easy = 0;
 		if (isset($_POST['easy'])) {
 			$no_easy = count($_POST['easy']);
@@ -32,32 +40,44 @@
 		if (isset($_POST['hard'])) {
 			$no_hard = count($_POST['hard']);
 		}
-		
-		$sql = "INSERT INTO tests (title, description, cid, no_easy, no_medium, no_hard) VALUES ('$title', '$description', '$cid', $no_easy, $no_medium, $no_hard)";
-		$conn->query($sql);
 
-		// Get the ID of the inserted test
-		$tid = $conn->insert_id;
+		if ($no_easy + $no_medium + $no_hard > 0) {
+			$uid = $_SESSION["uid"];
+			$sql = "INSERT INTO tests (title, description, cid, no_easy, no_medium, no_hard, uid) VALUES ('$title', '$description', '$cid', $no_easy, $no_medium, $no_hard, $uid)";
+			try {
+				$conn->query($sql);
 
-		if ($no_easy > 0) {
-			foreach ($_POST['easy'] as $qid) {
-				$sql = "INSERT INTO test_question (tid, qid) VALUES ('$tid', '$qid')";
-				$conn->query($sql);
+				// Get the ID of the inserted test
+				$tid = $conn->insert_id;
+
+				if ($no_easy > 0) {
+					foreach ($_POST['easy'] as $qid) {
+						$sql = "INSERT INTO test_question (tid, qid) VALUES ('$tid', '$qid')";
+						$conn->query($sql);
+					}
+				}
+				if ($no_medium > 0)  {
+					foreach ($_POST['medium'] as $qid) {
+						$sql = "INSERT INTO test_question (tid, qid) VALUES ('$tid', '$qid')";
+						$conn->query($sql);
+					}
+				}
+				if ($no_hard > 0)  {
+					foreach ($_POST['hard'] as $qid) {
+						$sql = "INSERT INTO test_question (tid, qid) VALUES ('$tid', '$qid')";
+						$conn->query($sql);
+					}
+				}
+				echo "Test added successfully. <br>";
+				$stat = 1;
+			} catch (mysqli_sql_exception $e) {
+				echo "Error: " . mysqli_error($conn) . " <br>";
 			}
+		} else {
+			echo "The test must have at least one question.";
 		}
-		if ($no_medium > 0)  {
-			foreach ($_POST['medium'] as $qid) {
-				$sql = "INSERT INTO test_question (tid, qid) VALUES ('$tid', '$qid')";
-				$conn->query($sql);
-			}
-		}
-		if ($no_hard > 0)  {
-			foreach ($_POST['hard'] as $qid) {
-				$sql = "INSERT INTO test_question (tid, qid) VALUES ('$tid', '$qid')";
-				$conn->query($sql);
-			}
-		}
-		echo "<p>Test added successfully.</p>";
+		echo '</div>';
+		echo '<script>showMessage(' . $stat . ')</script>';
 	} 
 
 	$easyQuestions = [];

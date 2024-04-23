@@ -10,23 +10,33 @@ if (isset($_GET['tid'])) {
 	$tid = $_GET['tid'];
 
 	// Fetch test details from the database
-	$sql = "SELECT title, description FROM tests WHERE tid = '$tid'";
+	$sql = "SELECT cid, title, description FROM tests WHERE tid = '$tid'";
 	$result = $conn->query($sql);
 
 	// Check if test exists
 	if ($result->num_rows > 0) {
 		// Display test title and description
 		$test = $result->fetch_assoc();
+		$cid = $test['cid'];
+		$courseName = ($conn->query("SELECT name FROM courses WHERE cid = $cid"))->fetch_assoc()['name'];
 		echo '<div id="contentToExport">';
-		echo '<div class="d-flex justify-content-between align-items-center mb-3">';
-		echo '<h1>' . $test['title'] . '</h1>';
-		echo '<button id="exportButton" class="btn btn-primary">Export to DOCX</button>';
+		echo '<div class="d-flex justify-content-between align-items-center mt-3">';
+		echo '<h1 id="courseName">' . $courseName . '</h1>';
+		if(isset($_SESSION["uid"])) {
+			echo '<button id="exportButton" class="btn btn-primary">Export to DOCX</button>';
+		}
 		echo '</div>';
-		echo '<p>' . $test['description'] . '</p>';
+		echo '<div class="d-flex justify-content-between align-items-center mb-3">';
+		echo '<h2>' . $test['title'] . '</h2>';
 
 		// Fetch questions associated with the test from the database
 		$sql = "SELECT qid FROM test_question WHERE tid = '$tid' ORDER BY RAND()";
 		$questions = $conn->query($sql);
+
+		$noQuestions = $questions->num_rows;
+		echo '<h5 id="noQuestions">' . $noQuestions . ' questions</h5>';
+		echo '</div>';
+		echo '<p>' . $test['description'] . '</p>';
 
 		// Loop through each question and include view_question.php
 		while ($row = $questions->fetch_assoc()) {
@@ -94,11 +104,22 @@ if (isset($_GET['tid'])) {
 				checkbox.checked = false;
 			}
 		});
-		this.textContent = "Number of correct answers: " + noCorrect;
+		this.textContent = "Number of correct answers: " + noCorrect + "/" + Object.keys(optionsOf).length;
 		this.disabled = true;
 	});
 	document.getElementById('exportButton').addEventListener('click', function() {
-		Export2Word('contentToExport', 'x');
+		this.remove();
+		var courseName = document.getElementById('courseName').textContent;
+
+		var currentDate = new Date();
+		var currentDay = currentDate.getDate();
+		var currentMonth = currentDate.getMonth() + 1; // Months are zero-based (0 = January)
+		var currentYear = currentDate.getFullYear();
+		var dateString = currentDay + '-' + currentMonth + '-' + currentYear;
+
+		var noQuestions = document.getElementById('noQuestions').textContent;
+		noQuestions = noQuestions.substring(0, noQuestions.indexOf(' ')) + 'Q';
+		Export2Word('contentToExport', courseName + '_' + dateString + '_' + noQuestions);
 	});
 	function Export2Word(element, filename = ''){
 		var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>TestSuite</title></head><body>";
@@ -120,7 +141,7 @@ if (isset($_GET['tid'])) {
 
 		document.body.appendChild(downloadLink);
 		
-		if(navigator.msSaveOrOpenBlob ){
+		if(navigator.msSaveOrOpenBlob){
 			navigator.msSaveOrOpenBlob(blob, filename);
 		} else {
 			// Create a link to the file

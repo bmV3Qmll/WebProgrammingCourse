@@ -1,6 +1,6 @@
 <?php
 include 'nav_bar.php';
-if(isset($_SESSION["username"])) {
+if(isset($_SESSION["uid"])) {
 	header("Location: index.php");
 	exit();
 }
@@ -22,10 +22,10 @@ if (isset($_POST['username'])) {
 	} elseif (strlen($password) < 8 || !preg_match("/^[a-zA-Z0-9]+$/", $password)) {
 		$error = "Password must be at least 8 characters long and contains only alphanumeric characters.";
 	} else {
-		$sql = "SELECT * FROM users WHERE username='$username' AND password='" . md5($password) . "'";
+		$sql = "SELECT uid FROM users WHERE username='$username' AND password='" . md5($password) . "'";
 		$result = $conn->query($sql);
 		if ($result->num_rows == 1) {
-			$_SESSION['username'] = $username;
+			$_SESSION['uid'] = $result->fetch_assoc()['uid'];
 			header("Location: index.php");
 			exit();
 		}

@@ -1,6 +1,6 @@
 <?php
 include 'nav_bar.php';
-if(isset($_SESSION["username"])) {
+if(isset($_SESSION["uid"])) {
 	header("Location: index.php");
 	exit();
 }

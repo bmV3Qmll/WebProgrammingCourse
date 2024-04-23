@@ -23,7 +23,7 @@
 	<div class="d-flex justify-content-between align-items-center mb-3">
 		<h1>Courses</h1>
 		<?php
-			if(isset($_SESSION["username"])) {
+			if(isset($_SESSION["uid"])) {
 				echo '<a href="add_course.php" class="btn btn-primary">Add Course</a>';
 			}
 		?>
@@ -40,23 +40,17 @@
 		</ul>
 	</nav>
 </div>
-
-<!-- Bootstrap JS and jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <script>
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function() {
 	// Function to fetch courses via AJAX
 	function fetchCourses(page) {
-		let xhttp = new XMLHttpRequest();
-		let url = 'fetch_courses.php?page=' + page
+		var xhttp = new XMLHttpRequest();
+		var url = 'fetch_courses.php?page=' + page;
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				let responseJSON = JSON.parse(this.responseText);
-				$('#courseContainer').html(responseJSON.courses_html);
-				$('#pagination').html(responseJSON.pagination_html);
+				document.getElementById('courseContainer').innerHTML = responseJSON.courses_html;
+				document.getElementById('pagination').innerHTML = responseJSON.pagination_html;
 			}
 		};
 		xhttp.open("GET", url, true);
@@ -67,16 +61,22 @@ $(document).ready(function(){
 	fetchCourses(1);
 
 	// Pagination click event
-	$(document).on('click', '.page-link', function(e){
-		e.preventDefault();
-		var page = $(this).attr('data-page');
-		fetchCourses(page);
+	document.addEventListener('click', function(event) {
+		if (event.target.classList.contains('page-link')) {
+			event.preventDefault();
+			var page = event.target.getAttribute('data-page');
+			fetchCourses(page);
+		}
 	});
 
+	var courseContainer = document.getElementById('courseContainer');
 	// Redirect to course page when clicking on a course container
-	$(document).on('click', '.course-card', function(){
-		var courseName = $(this).find('.course-name').text();
-		window.location.href = 'view_course.php?name=' + courseName;
+	courseContainer.addEventListener('click', function(event) {
+		var card = event.target.closest('.course-card');
+		if (card) {
+			var courseName = card.querySelector('.course-name').textContent;
+			window.location.href = 'view_course.php?name=' + encodeURIComponent(courseName);
+		}
 	});
 });
 </script>

@@ -1,60 +1,12 @@
 <?php include 'nav_bar.php' ?>
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<style>
-	body {
-		background-color: #f8f9fa;
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-attachment: fixed;
-	}
-
-	.container {
-		background-color: rgba(255, 255, 255, 0.8); /* Set container background color with transparency */
-		padding: 20px;
-		border-radius: 10px;
-	}
-
-	.test-card {
-		margin-bottom: 20px;
-	}
-
-	div.bounding-box a {
-		font-size: 30px;
-		color: inherit;
-		text-decoration: none;
-	}
-
-	div.bounding-box a:hover {
-		font-size: 40px;
-		color: inherit;
-		text-decoration: none;
-	}
-
-	.bounding-box {
-        border: 2px solid #ccc; /* Border color */
-        padding: 10px; /* Padding inside the bounding box */
-        border-radius: 5px; /* Rounded corners */
-        margin-bottom: 20px; /* Margin to separate bounding boxes */
-    }
-</style>
+<link rel="stylesheet" href="test.css">
 
 <div class="container">
 <?php
 include 'connect_db.php';
 $courseName = $_GET['name'];
-/*
-$sqlImagePath = "SELECT image_path FROM courses WHERE name = '$courseName'";
-$resultImagePath = $conn->query($sqlImagePath);
-if ($resultImagePath->num_rows > 0) {
-	$rowImagePath = $resultImagePath->fetch_assoc();
-	$courseImagePath = $rowImagePath['image_path'];
-} else {
-	$courseImagePath = 'assets/blank.jpg'; // Set default image path
-}
-
-echo "<body style=\"background-image: url('" . $courseImagePath . "');\"";
-*/
 $sql = "SELECT cid FROM courses WHERE name = '$courseName'";
 
 $result = $conn->query($sql);
@@ -63,7 +15,7 @@ $cid = $result->fetch_assoc()['cid'];
 
 echo '<div class="d-flex justify-content-between align-items-center mb-3">';
 echo '<div class="mr-auto p-2"><h1>' . $courseName . '</h1></div>';
-if(isset($_SESSION["username"])) {
+if(isset($_SESSION["uid"])) {
 	echo '<div class="p-2"><a href="add_test.php?cid=' . $cid . '" class="btn btn-primary">Add Test</a></div>';
 	echo '<div class="p-2"><a href="add_question.php?cid=' . $cid . '" class="btn btn-primary">Add Question</a></div>';
 }
@@ -98,8 +50,9 @@ if ($result->num_rows > 0) {
 		echo '</div>';
 
 		// JavaScript to create pie chart
+		$escaped_title = str_replace("'", "\'", $title);
 		echo "<script>
-				var ctx = document.getElementById('chart_$title').getContext('2d');
+				var ctx = document.getElementById('chart_$escaped_title').getContext('2d');
 				var myChart = new Chart(ctx, {
 					type: 'pie',
 					data: {

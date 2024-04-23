@@ -1,0 +1,35 @@
+body {
+	background-color: #f8f9fa;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.container {
+	background-color: rgba(255, 255, 255, 0.8); /* Set container background color with transparency */
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.test-card {
+	margin-bottom: 20px;
+}
+
+div.bounding-box a {
+	font-size: 30px;
+	color: inherit;
+	text-decoration: none;
+}
+
+div.bounding-box a:hover {
+	font-size: 40px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.bounding-box {
+	border: 2px solid #ccc; /* Border color */
+	padding: 10px; /* Padding inside the bounding box */
+	border-radius: 5px; /* Rounded corners */
+	margin-bottom: 20px; /* Margin to separate bounding boxes */
+}
