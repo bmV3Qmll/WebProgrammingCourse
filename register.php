@@ -5,7 +5,7 @@ if(isset($_SESSION["uid"])) {
 	exit();
 }
 ?>
-<link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="css/login.css">
 <?php
 $error = NULL;
 if (isset($_REQUEST['username'])) {
@@ -13,11 +13,11 @@ if (isset($_REQUEST['username'])) {
 	// removes backslashes
 	$username = stripslashes($_REQUEST['username']);
 	// escapes special characters in a string
-	$username = mysqli_real_escape_string($conn, $username);
+	$username = $conn->real_escape_string($username);
 	$email    = stripslashes($_REQUEST['email']);
-	$email    = mysqli_real_escape_string($conn, $email);
+	$email    = $conn->real_escape_string($email);
 	$password = stripslashes($_REQUEST['password']);
-	$password = mysqli_real_escape_string($conn, $password);
+	$password = $conn->real_escape_string($password);
 
 	if (empty($username)) {
 		$error = "Empty username.";
@@ -31,12 +31,14 @@ if (isset($_REQUEST['username'])) {
 		$sql = "INSERT into users (username, password, email) VALUES ('$username', '" . md5($password) . "', '$email')";
 		$result = $conn->query($sql);
 		if ($result) {
+			$conn->close();
 			header("Location: login.php");
 			exit();
 		} else {
 			$error = "Database error. Please try again.";	
 		}
 	}
+	$conn->close();
 }
 ?>
 <form class="form login-container" action="" method="post">

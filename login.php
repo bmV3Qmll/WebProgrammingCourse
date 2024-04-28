@@ -5,15 +5,15 @@ if(isset($_SESSION["uid"])) {
 	exit();
 }
 ?>
-<link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="css/login.css">
 <?php
 $error = NULL;
 if (isset($_POST['username'])) {
 	require('connect_db.php');
 	$username = stripslashes($_REQUEST['username']);
-	$username = mysqli_real_escape_string($conn, $username);
+	$username = $conn->real_escape_string($username);
 	$password = stripslashes($_REQUEST['password']);
-	$password = mysqli_real_escape_string($conn, $password);
+	$password = $conn->real_escape_string($password);
 
 	if (empty($username)) {
 		$error = "Empty username.";
@@ -26,11 +26,13 @@ if (isset($_POST['username'])) {
 		$result = $conn->query($sql);
 		if ($result->num_rows == 1) {
 			$_SESSION['uid'] = $result->fetch_assoc()['uid'];
+			$conn->close();
 			header("Location: index.php");
 			exit();
 		}
 		$error = "Incorrect username / password.";
 	}
+	$conn->close();
 }
 ?>
 <form class="form login-container" method="post" name="login">

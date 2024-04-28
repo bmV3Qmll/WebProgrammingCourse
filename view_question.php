@@ -1,5 +1,5 @@
 <?php include 'nav_bar.php' ?>
-<link rel="stylesheet" href="question.css">
+<link rel="stylesheet" href="css/question.css">
 <div class="container">
 	<?php
 	include 'connect_db.php';
@@ -31,5 +31,5 @@
 			}
 		});
 	</script>
-	<script type="text/javascript" src="question.js"></script>
+	<script type="text/javascript" src="js/question.js"></script>
 </div>

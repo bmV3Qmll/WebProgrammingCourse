@@ -1,7 +1,7 @@
 <?php include 'nav_bar.php' ?>
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<link rel="stylesheet" href="test.css">
+<link rel="stylesheet" href="css/test.css">
 
 <div class="container">
 <?php

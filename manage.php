@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="manage.css?id=1">
+<link rel="stylesheet" href="css/manage.css">
 <?php
 include 'nav_bar.php';
 if(!isset($_SESSION["uid"])) {
