@@ -54,7 +54,11 @@ To install Test Suite, follow these simple steps:
 4. Compile a test by selecting questions from the available pool.
    <img width="960" alt="image" src="https://github.com/bmV3Qmll/WebProgrammingCourse/assets/104069545/c1a2284d-6948-4ff9-a9ad-23cadbd9d8b6">
 5. Export the test to docx for offline examination.
-   <img width="960" alt="image" src="https://github.com/bmV3Qmll/WebProgrammingCourse/assets/104069545/ef662eb6-a08c-4ef9-ac5a-eab9595eeb5d">
+   <img width="960" alt="image" src="https://github.com/bmV3Qmll/WebProgrammingCourse/assets/104069545/1677e742-7de5-4370-b8a5-68a8839b68b9">
+6. Manage the created tests and questions.
+   <img width="960" alt="image" src="https://github.com/bmV3Qmll/WebProgrammingCourse/assets/104069545/1e8c49ef-4a1d-4489-8cb3-db1d281edec0">
+   
+   <img width="960" alt="image" src="https://github.com/bmV3Qmll/WebProgrammingCourse/assets/104069545/0df4e52b-95b4-4c59-af88-27bc739deb7e">
 
 ## Contributors
 
