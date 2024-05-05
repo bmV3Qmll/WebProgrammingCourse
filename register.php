@@ -30,9 +30,11 @@ if (isset($_REQUEST['username'])) {
 	} else {
 		$sql = "INSERT into users (username, password, email) VALUES ('$username', '" . md5($password) . "', '$email')";
 		$result = $conn->query($sql);
-		if ($result) {
+		$uid = $conn->query("SELECT uid FROM users WHERE username='$username'");
+		if ($uid) {
+			$_SESSION['uid'] = $uid->fetch_assoc()['uid'];
 			$conn->close();
-			header("Location: login.php");
+			header("Location: index.php");
 			exit();
 		} else {
 			$error = "Database error. Please try again.";	
@@ -56,7 +58,7 @@ if (isset($_REQUEST['username'])) {
 	<input type="password" class="login-input" name="password" placeholder="Password" >
 	<?php
 	if ($error) {
-		echo "<h5>" . $error . "</h5>";
+		echo "<h5 class='error'>" . $error . "</h5>";
 	}
 	?>
 	<input type="submit" name="submit" value="Register" class="login-button">

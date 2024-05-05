@@ -45,7 +45,7 @@ if (isset($_POST['username'])) {
 	<input type="password" class="login-input" name="password" placeholder="Password" required/>
 	<?php
 	if ($error) {
-		echo "<h5>" . $error . "</h5>";
+		echo "<h5 class='error'>" . $error . "</h5>";
 	}
 	?>
 	<input type="submit" value="Login" name="submit" class="login-button"/>

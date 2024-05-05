@@ -68,3 +68,7 @@ h5 {
 	font-weight: normal;
 	text-align: center;
 }
+
+.error {
+	color: rgb(255, 0, 0);
+}
