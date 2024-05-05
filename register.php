@@ -43,17 +43,17 @@ if (isset($_REQUEST['username'])) {
 ?>
 <form class="form login-container" action="" method="post">
 	<h1 class="login-title">Register</h1>
-	<input type="text" class="login-input" name="username" placeholder="Username" required value="<?php
+	<input type="text" class="login-input" name="username" placeholder="Username" value="<?php
 		if (isset($username)) {
 			echo $username;
 		}
 	?>"/>
-	<input type="email" class="login-input" name="email" placeholder="Email Adress" required value="<?php
+	<input type="email" class="login-input" name="email" placeholder="Email Address" value="<?php
 		if (isset($email)) {
 			echo $email;
 		}
 	?>">
-	<input type="password" class="login-input" name="password" placeholder="Password" required >
+	<input type="password" class="login-input" name="password" placeholder="Password" >
 	<?php
 	if ($error) {
 		echo "<h5>" . $error . "</h5>";
