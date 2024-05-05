@@ -19,8 +19,10 @@ if (isset($_POST['username'])) {
 		$error = "Empty username.";
 	} elseif (empty($password)) {
 		$error = "Empty password.";
-	} elseif (strlen($password) < 8 || !preg_match("/^[a-zA-Z0-9]+$/", $password)) {
-		$error = "Password must be at least 8 characters long and contains only alphanumeric characters.";
+	} elseif (strlen($password) < 8) {
+		$error = "Password must be at least 8 characters long.";
+	} elseif (!preg_match("/^[a-zA-Z0-9]+$/", $password)) {
+		$error = "Password must contain only alphanumeric characters.";
 	} else {
 		$sql = "SELECT uid FROM users WHERE username='$username' AND password='" . md5($password) . "'";
 		$result = $conn->query($sql);

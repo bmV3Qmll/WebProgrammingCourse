@@ -21,12 +21,14 @@ if (isset($_REQUEST['username'])) {
 
 	if (empty($username)) {
 		$error = "Empty username.";
+	} elseif (empty($email)) {
+		$error = "Empty email.";
 	} elseif (empty($password)) {
 		$error = "Empty password.";
-	} elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		$error = "Not a valid email address.";
-	} elseif (strlen($password) < 8 || !preg_match("/^[a-zA-Z0-9]+$/", $password)) {
-		$error = "Password must be at least 8 characters long and contains only alphanumeric characters.";
+	} elseif (strlen($password) < 8) {
+		$error = "Password must be at least 8 characters long.";
+	} elseif (!preg_match("/^[a-zA-Z0-9]+$/", $password)) {
+		$error = "Password must contain only alphanumeric characters.";
 	} else {
 		$sql = "INSERT into users (username, password, email) VALUES ('$username', '" . md5($password) . "', '$email')";
 		$result = $conn->query($sql);
