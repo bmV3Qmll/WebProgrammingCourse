@@ -37,12 +37,12 @@ if (isset($_POST['username'])) {
 ?>
 <form class="form login-container" method="post" name="login">
 	<h1 class="login-title">Login</h1>
-	<input type="text" class="login-input" name="username" placeholder="Username" required autofocus="true" value="<?php
+	<input type="text" class="login-input" name="username" placeholder="Username" autofocus="true" value="<?php
 		if (isset($username)) {
 			echo $username;
 		}
 	?>"/>
-	<input type="password" class="login-input" name="password" placeholder="Password" required/>
+	<input type="password" class="login-input" name="password" placeholder="Password"/>
 	<?php
 	if ($error) {
 		echo "<h5 class='error'>" . $error . "</h5>";
