@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$description = $conn->real_escape_string($_POST['description']);
 	$difficulty = strtolower($_POST['difficulty']);
 	$multiple = 1;
-	$doesHasAnswer = 2;
+	$doesHaveAnswer = 2;
 
 	$options = [];
 	if (isset($_POST['optionContent']) && is_array($_POST['optionContent'])) {
@@ -64,13 +64,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if (count($optionValues) == 1) {
 				$multiple = 0;
 			}
-			$doesHasAnswer = 1;
+			$doesHaveAnswer = 1;
 		}
 		else {
 			foreach ($optionContents as $index => $content) {
 				$options[$content] = "0";
 			}
-			$doesHasAnswer = 0;
+			$doesHaveAnswer = 0;
 		}
 	}
 
@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$options = str_replace("\\\"", "\\\\\"", $options);
 	$options = str_replace("'", "\\'", $options);
 
-	if ($doesHasAnswer == 1) {
+	if ($doesHaveAnswer == 1) {
 		if ($imageOk == 1) {
 			$sql = "SET @json = ('$options')";
 			$conn->query($sql);
@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		// Close database connection
 		mysqli_close($conn);
 	}
-	elseif ($doesHasAnswer == 0) {
+	elseif ($doesHaveAnswer == 0) {
 		echo "Question doesn't have correct answer(s). <br>";
 		echo '<script>showMessage(' . $stat . ')</script>';
 	}
