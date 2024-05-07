@@ -30,17 +30,27 @@ if (isset($_REQUEST['username'])) {
 	} elseif (!preg_match("/^[a-zA-Z0-9]+$/", $password)) {
 		$error = "Password must contain only alphanumeric characters.";
 	} else {
-		$sql = "INSERT into users (username, password, email) VALUES ('$username', '" . md5($password) . "', '$email')";
-		$result = $conn->query($sql);
-		$uid = $conn->query("SELECT uid FROM users WHERE username='$username'");
-		if ($uid) {
-			$_SESSION['uid'] = $uid->fetch_assoc()['uid'];
-			$conn->close();
-			header("Location: index.php");
-			exit();
+		$hash = md5($password);
+		if (($conn->query("SELECT COUNT(*) AS count FROM users WHERE email='$email'"))->fetch_assoc()['count']) {
+			$error = "This email has been registered.";
+		} else if (($conn->query("SELECT COUNT(*) AS count FROM users WHERE username='$username'"))->fetch_assoc()['count']) {
+			$error = "This username has been used.";
+		} else if (($conn->query("SELECT COUNT(*) AS count FROM users WHERE password='$hash'"))->fetch_assoc()['count']) {
+			$error = "This password has been used.";
 		} else {
-			$error = "Database error. Please try again.";	
+			$sql = "INSERT into users (username, password, email) VALUES ('$username', '" . md5($password) . "', '$email')";
+			$result = $conn->query($sql);
+			$uid = $conn->query("SELECT uid FROM users WHERE username='$username'");
+			if ($uid) {
+				$_SESSION['uid'] = $uid->fetch_assoc()['uid'];
+				$conn->close();
+				header("Location: index.php");
+				exit();
+			} else {
+				$error = "Database error. Please try again.";	
+			}
 		}
+		
 	}
 	$conn->close();
 }
