@@ -3,7 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Test Suite</title>
+	<title>
+		<?php
+			$currentPage = substr($_SERVER['REQUEST_URI'], 1, -4);
+			if (strlen($currentPage) !== 0 and $currentPage !== "index") {
+				echo "Test Suite: " . $currentPage;
+			}
+			else {
+				echo "Test Suite";
+			}
+		?>
+	</title>
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -34,11 +44,6 @@
 		</button>
 		<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
 			<ul class="navbar-nav">
-				<!--
-				<li class="nav-item">
-					<a class="nav-link" href="index.php"><i class="fa fa-home"></i> Home</a>
-				</li>
-				-->
 				<?php
 					session_start();
 					if(!isset($_SESSION["uid"])) {
