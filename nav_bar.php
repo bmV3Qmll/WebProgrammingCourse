@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>
 		<?php
-			$currentPage = substr($_SERVER['REQUEST_URI'], 1, -4);
+			$currentPage = substr($_SERVER['REQUEST_URI'], 1, strpos($_SERVER['REQUEST_URI'], '.') - 1);
 			if (strlen($currentPage) !== 0 and $currentPage !== "index") {
 				echo "Test Suite: " . $currentPage;
 			}

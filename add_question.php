@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$description = $conn->real_escape_string($_POST['description']);
 	$difficulty = strtolower($_POST['difficulty']);
 	$multiple = 1;
+	$doesHasAnswer = 2;
 
 	$options = [];
 	if (isset($_POST['optionContent']) && is_array($_POST['optionContent'])) {
@@ -63,40 +64,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if (count($optionValues) == 1) {
 				$multiple = 0;
 			}
-		} else {
+			$doesHasAnswer = 1;
+		}
+		else {
 			foreach ($optionContents as $index => $content) {
 				$options[$content] = "0";
 			}
+			$doesHasAnswer = 0;
 		}
 	}
+
 	$options = json_encode($options);
 	$options = str_replace("\\\"", "\\\\\"", $options);
 	$options = str_replace("'", "\\'", $options);
 
-	if ($imageOk == 1) {
-		$sql = "SET @json = ('$options')";
-		$conn->query($sql);
-		$uid = $_SESSION["uid"];
-		$sql = "";
-		if ($imagePath) {
-			$sql = "INSERT INTO questions (title, description, cid, options, difficulty, image_path, multiple, uid) 
-			VALUES ('$title', '$description', '$cid', @json, '$difficulty', '$imagePath', '$multiple', $uid)";
-		} else {
-			$sql = "INSERT INTO questions (title, description, cid, options, difficulty, multiple, uid) 
-			VALUES ('$title', '$description', '$cid', @json, '$difficulty', $multiple, $uid)";
-		}
-		try {
+	if ($doesHasAnswer == 1) {
+		if ($imageOk == 1) {
+			$sql = "SET @json = ('$options')";
 			$conn->query($sql);
-			echo "Question added successfully. <br>";
-			$stat = 1;
-		} catch (mysqli_sql_exception $e) {
-			echo "Error: " . mysqli_error($conn) . " <br>";
+			$uid = $_SESSION["uid"];
+			$sql = "";
+			if ($imagePath) {
+				$sql = "INSERT INTO questions (title, description, cid, options, difficulty, image_path, multiple, uid) 
+				VALUES ('$title', '$description', '$cid', @json, '$difficulty', '$imagePath', '$multiple', $uid)";
+			} else {
+				$sql = "INSERT INTO questions (title, description, cid, options, difficulty, multiple, uid) 
+				VALUES ('$title', '$description', '$cid', @json, '$difficulty', $multiple, $uid)";
+			}
+			try {
+				$conn->query($sql);
+				echo "Question added successfully. <br>";
+				$stat = 1;
+			} catch (mysqli_sql_exception $e) {
+				echo "Error: " . mysqli_error($conn) . " <br>";
+			}
 		}
+		echo '<script>showMessage(' . $stat . ')</script>';
+		// Close database connection
+		mysqli_close($conn);
+	}
+	elseif ($doesHasAnswer == 0) {
+		echo "Question doesn't have correct answer(s). <br>";
+		echo '<script>showMessage(' . $stat . ')</script>';
 	}
 	echo '</div>';
-	echo '<script>showMessage(' . $stat . ')</script>';
-	// Close database connection
-	mysqli_close($conn);
 }
 ?>
 	<form id="uploadForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?cid=' . $cid; ?>" class="mt-4" enctype="multipart/form-data">
@@ -176,6 +187,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		for (var i = 0; i < opts.length; i++) {
 			opts[i].value = i.toString();
 		}
-		document.getElementById("uploadForm").submit();
+		document.getElementById("uploadForm").submit;
 	}
 </script>
